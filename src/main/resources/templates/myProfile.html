@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My profile</title>
+</head>
+<body>
+
+<form id="user-form">
+    <div>
+        <div class="left">
+            <h1>Photo</h1>
+        </div>
+        <div class="right">
+            <h2><span><b th:text="${user.firstName}"></b></span></br>
+                <span><b th:text="${user.lastName}"></b></span></h2>
+            <h4 class="heading">Phone -<b th:text="${user.phone}"></b></h4>
+            <h4 class="heading">Country - <b th:text="${user.country}"></b></h4>
+            <h4 class="heading">City - <b th:text="${user.city}"></b></h4>
+            <h4 class="heading">Age - <b th:text="${user.age}"></b></h4>
+            <h4 class="heading">DateRegistered - <b th:text="${user.dateRegistered}"></b></h4>
+            <h4 class="heading">DateLastActive - <b th:text="${user.dateLastActive}"></b></h4>
+            <h4 class="heading">RelationshipStatus - <b th:text="${user.relationshipStatus}"></b></h4>
+            <h4 class="heading">Religion - <b th:text="${user.religion}"></b></h4>
+            <h4 class="heading">School - <b th:text="${user.school}"></b></h4>
+            <h4 class="heading">University - <b th:text="${user.university}"></b></h4>
+            <h4 class="heading">Id - <b th:text="${user.id}"></b></h4>
+        </div>
+    </div>
+
+    <input id="userId" th:value="${user.id}" hidden>
+</form>
+
+<form id="IncomeRequests" th:align="left">
+    <div id="div1" th:align="left">
+        <table class="table">
+            <tr>
+                <th> Income</th>
+                <th> Requests</th>
+            </tr>
+            <tr th:each="incomeRequests : ${incomeRequests}">
+                <td><span th:text="${incomeRequests.userFrom.id}"></span></td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="div2" th:align="right">
+        <table class="table">
+            <tr>
+                <th> Outcome Requests</th>
+                <th> Requests</th>
+            </tr>
+            <tr th:each="outcomeRequests : ${outcomeRequests}">
+                <td><span th:text="${outcomeRequests.userTo.id}"></span></td>
+            </tr>
+        </table>
+    </div>
+</form>
+
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</html>
+
+<style>
+    .left {
+        float: left;
+        width: 200px;
+        height: 300px;
+        border-style: solid;
+    }
+
+    .right {
+        margin-left: 300px;
+    }
+
+    #div1 {
+        display: none;
+    }
+
+    #div2 {
+        display: none;
+    }
+</style>

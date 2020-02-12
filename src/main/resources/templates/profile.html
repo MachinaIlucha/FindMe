@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Find me</title>
+</head>
+<body>
+
+<form id="user-form">
+    <div>
+        <div class="left">
+            <h1>Photo</h1>
+        </div>
+        <div class="right">
+            <h2><span><b th:text="${user.firstName}"></b></span></br>
+                <span><b th:text="${user.lastName}"></b></span></h2>
+            <h4 class="heading">Phone -<b th:text="${user.phone}"></b></h4>
+            <h4 class="heading">Country - <b th:text="${user.country}"></b></h4>
+            <h4 class="heading">City - <b th:text="${user.city}"></b></h4>
+            <h4 class="heading">Age - <b th:text="${user.age}"></b></h4>
+            <h4 class="heading">DateRegistered - <b th:text="${user.dateRegistered}"></b></h4>
+            <h4 class="heading">DateLastActive - <b th:text="${user.dateLastActive}"></b></h4>
+            <h4 class="heading">RelationshipStatus - <b th:text="${user.relationshipStatus}"></b></h4>
+            <h4 class="heading">Religion - <b th:text="${user.religion}"></b></h4>
+            <h4 class="heading">School - <b th:text="${user.school}"></b></h4>
+            <h4 class="heading">University - <b th:text="${user.university}"></b></h4>
+            <h4 class="heading">Id - <b th:text="${user.id}"></b></h4>
+        </div>
+    </div>
+
+    <input id="userId" th:value="${user.id}" hidden>
+
+</form>
+
+<form id="sendRequest">
+    <input name="submit" type="submit" value="Add to friends"/>
+</form>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</html>
+
+<style>
+    .left {
+        float: left;
+        width: 200px;
+        height: 300px;
+        border-style: solid;
+    }
+
+    .right {
+        margin-left: 300px;
+    }
+</style>
+
+<script>
+    $("#sendRequest").submit(function (e) {
+
+        e.preventDefault();
+
+        $.ajax({
+            url: "/sendFriendRequest",
+            type: "POST",
+            data: {"id" : $('#userId').val()},
+            success: function success(data) {
+                alert("success!");
+            },
+            error: function error(xhr) {
+                return "404Error";
+            }
+        });
+    });
+</script>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+<h1>Login</h1>
+<form id="login-form" action="login" method='POST'>
+    <table>
+        <tr>
+            <td>Email:</td>
+            <td><input type='text' name='email' value=''></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type='password' name='password' /></td>
+        </tr>
+        <tr>
+            <td><input name="submit" type="submit" value="login" /></td>
+        </tr>
+    </table>
+</form>
+</body>
+
+</html>
+
+<script>
+    $("#login-form").submit(function (e) {
+
+        e.preventDefault();
+
+        $.ajax({
+            url: "login",
+            type: "GET",
+            data: $('#login-form').serialize(),
+            success: function success(data){
+                alert("You are in!");
+            },
+            error: function error(xhr) {
+                return "404Error";
+            }
+        });
+    });
+</script>

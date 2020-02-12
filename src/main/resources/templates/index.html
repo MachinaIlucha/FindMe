@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Find me</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="starter-template">
+        <h1>Welcome to Find me</h1>
+    </div>
+</div>
+
+<form id="registration-form">
+    <table>
+        <tr>
+            <td>Email</td>
+            <td><input type='text' placeholder="Email" name='email'></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type='text' placeholder="Password" name='password'></td>
+        </tr>
+        <tr>
+            <td>First Name</td>
+            <td><input type='text' placeholder="First Name" name='firstName'></td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><input type='text' placeholder="Last Name" name='lastName'></td>
+        </tr>
+        <tr>
+            <td>Phone:</td>
+            <td><input type='text' placeholder="Phone" name='phone'></td>
+        </tr>
+        <tr>
+            <td>Country</td>
+            <td><input type='text' placeholder="Country" name='country'></td>
+        </tr>
+        <tr>
+            <td>City</td>
+            <td><input type='text' placeholder="City" name='city'></td>
+        </tr>
+        <tr>
+            <td>Age</td>
+            <td><input type='text' placeholder="Age" name='age'></td>
+        </tr>
+        <tr>
+            <td>RelationshipStatus</td>
+            <td><input type='text' placeholder="RelationshipStatus" name='relationshipStatus'></td>
+        </tr>
+        <tr>
+            <td>Religion</td>
+            <td><input type='text' placeholder="Religion" name='religion'></td>
+        </tr>
+        <tr>
+            <td>School</td>
+            <td><input type='text' placeholder="School" name='school'></td>
+        </tr>
+        <tr>
+            <td>University</td>
+            <td><input type='text' placeholder="University" name='university'></td>
+        </tr>
+
+        <input name="submit" type="submit" value="My Profile" onClick='location.href="myProfile"' align="right"/>
+
+    </table>
+
+    <button type="submit">Register</button>
+    <form id="login">
+        <div class="content" id="right">
+            <input name="submit" type="submit" value="Login" onClick='location.href="loginUser"'/>
+        </div>
+    </form>
+</form>
+<form id="logout">
+    <div class="content" id="right">
+        <input name="submit" type="submit" value="Logout"/>
+    </div>
+</form>
+
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</html>
+
+
+<style>
+    #right {
+        text-align: right;
+    }
+</style>
+
+<script>
+    $("#registration-form").submit(function (e) {
+
+        e.preventDefault();
+
+        $.ajax({
+            url: "user-registration",
+            type: "POST",
+            data: $('#registration-form').serialize()
+        });
+    });
+
+    $("#logout").submit(function (e) {
+
+        e.preventDefault();
+
+        $.ajax({
+            url: "/logout",
+            type: "GET",
+            data: $('#logout').serialize()
+        });
+    });
+</script>
