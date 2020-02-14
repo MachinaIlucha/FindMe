@@ -8,26 +8,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CheckOutComeRequests implements AddRelationship {
-
-    private AddRelationship chain;
+public class CheckOutComeRequests extends AddRelationship {
 
     @Autowired
     private RelationshipDAO relationshipDAO;
 
     @Override
-    public void setNextChain(AddRelationship nextChain) {
-        this.chain = nextChain;
+    public AddRelationship linkWith(AddRelationship next) {
+        return super.linkWith(next);
     }
 
     @Override
-    public boolean dispense(Long userIdFrom, Long userIdTo) {
+    public boolean check(Long userIdFrom, Long userIdTo) {
         try {
             if (relationshipDAO.countRelationships(userIdFrom, RelationshipType.WAITING) > 10)
                 throw new BadRequestException("BadRequestException");
         } catch (Exception Ie) {
             return false;
         }
-        return this.chain.dispense(userIdFrom, userIdTo);
+        return checkNext(userIdFrom, userIdTo);
+    }
+
+    @Override
+    public boolean checkNext(Long userIdFrom, Long userIdTo) {
+        return super.checkNext(userIdFrom, userIdTo);
     }
 }

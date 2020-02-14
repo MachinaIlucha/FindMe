@@ -69,7 +69,7 @@ public class FriendsRequestsController {
                 friendsRequestsService.deleteRelationship(userFrom.getId(), idTo);
             } catch (InternalServerError e) {
                 return "500Error";
-            } catch (NumberFormatException | BadRequestException e) {
+            } catch (NumberFormatException e) {
                 return "400Error";
             }
         } else return "login";
@@ -78,7 +78,7 @@ public class FriendsRequestsController {
     }
 
 
-    public List<Relationship> getIncomeRequests(HttpSession session) throws InternalServerError{
+    public List<Relationship> getIncomeRequests(HttpSession session) throws InternalServerError {
         List<Relationship> incomeRequests;
         try {
             User sessionUser = (User) session.getAttribute("user");

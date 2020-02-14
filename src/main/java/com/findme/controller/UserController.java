@@ -142,7 +142,7 @@ public class UserController {
     public String delete(@RequestBody User user) {
         try {
             userService.delete(user);
-            return "ok-delete";
+            return "ok-checkStatusRelationship";
         } catch (InternalServerError e) {
             return "500Error";
         }

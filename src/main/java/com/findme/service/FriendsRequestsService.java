@@ -9,11 +9,15 @@ import com.findme.models.User;
 import com.findme.relationship.add.AddRelationship;
 import com.findme.relationship.add.impl.CheckMaxListOfFriends;
 import com.findme.relationship.add.impl.CheckOutComeRequests;
-import com.findme.relationship.delete.CheckDaysToDelete;
-import com.findme.relationship.delete.DeleteRelationship;
+import com.findme.relationship.checkStatusRelationship.CheckStatus;
+import com.findme.relationship.checkStatusRelationship.impl.CheckStatusFRIENDS;
+import com.findme.relationship.checkStatusRelationship.impl.CheckStatusNEVERFRIENDS;
+import com.findme.relationship.checkStatusRelationship.impl.CheckStatusNOFRIENDS;
+import com.findme.relationship.checkStatusRelationship.impl.CheckStatusWAITING;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -25,14 +29,19 @@ public class FriendsRequestsService {
     @Autowired
     private RelationshipDAO relationshipDAO;
 
+    @Autowired
+    private CheckMaxListOfFriends c2;
+
+    @Autowired
+    private CheckOutComeRequests c3;
+
     //Добавление
     public Relationship addRelationship(Long userIdFrom, Long userIdTo) throws BadRequestException, InternalServerError {
         /**Pattern Chain of Responsibility**/
 
-        AddRelationship c1 = new CheckMaxListOfFriends();
-        c1.setNextChain(new CheckOutComeRequests());
+        c2.linkWith(c3);
 
-        if (!c1.dispense(userIdFrom, userIdTo))
+        if (!c2.check(userIdFrom, userIdTo))
             throw new BadRequestException("BadRequestException");
 
         relationshipDAO.checkRelationship(userIdFrom, userIdTo);
@@ -52,10 +61,17 @@ public class FriendsRequestsService {
     }
 
     //Удаление
-    public void deleteRelationship(Long userIdFrom, Long userIdTo) throws BadRequestException, InternalServerError {
-        /**Pattern Chain of Responsibility**/
-        DeleteRelationship deleteRelationship = new CheckDaysToDelete();
-
+    public void deleteRelationship(Long userIdFrom, Long userIdTo) throws InternalServerError {
+        Relationship relationship = relationshipDAO.getRelationshipByQuery(userIdFrom, userIdTo);
+        int days = (int) ((new Date().getTime() - relationship.getDateCreated().getTime()) / (1000 * 60 * 60 * 24));
+        try {
+            if (userService.read(userIdFrom) == null || userService.read(userIdTo) == null)
+                if (relationship == null)
+                    if (days < 3)
+                        throw new BadRequestException("BadRequestException");
+        } catch (Exception e) {
+            throw new InternalServerError("InternalServerError");
+        }
         relationshipDAO.delete(relationshipDAO.getRelationshipByQuery(userIdFrom, userIdTo));
     }
 
@@ -73,17 +89,17 @@ public class FriendsRequestsService {
         else throw new BadRequestException("BadRequestException");
     }
 
-    public void checkStatusRelationship(Long userIdFrom, Long userIdTo, RelationshipType status) throws InternalServerError {
+    private void checkStatusRelationship(Long userIdFrom, Long userIdTo, RelationshipType status) throws InternalServerError {
         try {
             Relationship relationship = relationshipDAO.getRelationshipByQuery(userIdFrom, userIdTo);
-            if (relationship != null) {
-                if (relationship.getStatus() == RelationshipType.NEVERFRIENDS && status != RelationshipType.WAITING
-                        || relationship.getStatus() == RelationshipType.NOFRIENDS && status != RelationshipType.WAITING
-                        || relationship.getStatus() == RelationshipType.WAITING && status != RelationshipType.CANCELLED
-                        || relationship.getStatus() == RelationshipType.FRIENDS && status != RelationshipType.NOFRIENDS
-                        || relationship.getStatus() == RelationshipType.WAITING && status != RelationshipType.FRIENDS)
-                    throw new BadRequestException("BadRequestException");
-            }
+
+            CheckStatus checkStatus = new CheckStatusFRIENDS();
+            checkStatus.linkWith(new CheckStatusNEVERFRIENDS())
+                    .linkWith(new CheckStatusNOFRIENDS())
+                    .linkWith(new CheckStatusWAITING());
+
+            if (!checkStatus.check(status, relationship))
+                throw new BadRequestException("BadRequestException");
         } catch (Exception e) {
             throw new InternalServerError("InternalServerError");
         }

@@ -1,8 +1,22 @@
 package com.findme.relationship.add;
 
-public interface AddRelationship {
+import org.springframework.stereotype.Component;
 
-    void setNextChain(AddRelationship nextChain);
+@Component
+public abstract class AddRelationship {
+    private AddRelationship next;
 
-    boolean dispense(Long userIdFrom, Long userIdTo);
+    public AddRelationship linkWith(AddRelationship next) {
+        this.next = next;
+        return next;
+    }
+
+    public abstract boolean check(Long userIdFrom, Long userIdTo);
+
+    public boolean checkNext(Long userIdFrom, Long userIdTo) {
+        if (next == null) {
+            return true;
+        }
+        return next.check(userIdFrom, userIdTo);
+    }
 }
