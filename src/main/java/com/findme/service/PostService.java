@@ -1,30 +1,41 @@
 package com.findme.service;
 
-
-import com.findme.DAO.impl.GeneralDAO;
+import com.findme.DAO.impl.PostDAO;
+import com.findme.DAO.impl.RelationshipDAO;
+import com.findme.DAO.impl.UserDAO;
+import com.findme.Exceptions.BadRequestException;
+import com.findme.Exceptions.InternalServerError;
 import com.findme.models.Post;
+import com.findme.models.Relationship;
+import com.findme.models.RelationshipType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PostService {
 
     @Autowired
-    private GeneralDAO generalDAO;
+    private PostDAO postDAO;
 
-    public Post save(Post post) {
-        return (Post) generalDAO.save(post);
+    @Autowired
+    private RelationshipDAO relationshipDAO;
+
+    @Autowired
+    private UserDAO userDAO;
+
+    public Post addPost(Long userPosted, Long userProfile, String text) throws InternalServerError, BadRequestException {
+        Relationship relationship = relationshipDAO.getRelationshipByQuery(userPosted, userProfile);
+
+        if (relationship != null && relationship.getStatus() == RelationshipType.FRIENDS)
+            return postDAO.addPost(userDAO.read(userPosted), userDAO.read(userProfile), text);
+        else throw new BadRequestException("BadRequestException");
     }
 
-    public Post read(Long id) {
-        return (Post) generalDAO.read(id);
-    }
-
-    public Post update(Post post) {
-        return (Post) generalDAO.update(post);
-    }
-
-    public void delete(Post post) {
-        generalDAO.delete(post);
+    public List<Post> getPostsOfUser(Long pageId) throws BadRequestException, InternalServerError {
+        if (userDAO.read(pageId) != null)
+            return postDAO.getPostsOfUserByQuery(pageId);
+        else throw new BadRequestException("BadRequestException");
     }
 }

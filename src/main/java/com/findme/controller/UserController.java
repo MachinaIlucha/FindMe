@@ -3,6 +3,7 @@ package com.findme.controller;
 import com.findme.Exceptions.BadRequestException;
 import com.findme.Exceptions.InternalServerError;
 import com.findme.models.Login;
+import com.findme.models.Post;
 import com.findme.models.Relationship;
 import com.findme.models.User;
 import com.findme.service.UserService;
@@ -22,6 +23,9 @@ public class UserController {
 
     @Autowired
     private FriendsRequestsController requestsController;
+
+    @Autowired
+    private PostController postController;
 
     @RequestMapping(path = "/myProfile", method = RequestMethod.GET)
     public String myProfile(HttpSession session, Model model) {
@@ -52,6 +56,8 @@ public class UserController {
         try {
 
             user = userService.read(Long.parseLong(userId));
+            List<Post> posts = postController.getPostsOfUser(user);
+            model.addAttribute("posts", posts);
 
             if (user == null)
                 return "404Error";
@@ -108,9 +114,6 @@ public class UserController {
         session.invalidate();
         return "index";
     }
-
-
-
 
 
     /**

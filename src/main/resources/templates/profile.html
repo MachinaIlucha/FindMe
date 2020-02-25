@@ -36,6 +36,26 @@
     <input name="submit" type="submit" value="Add to friends"/>
 </form>
 
+<form id="WritePost" method="post">
+    <p>Write a post<Br>
+        <textarea id="comment" cols="40" rows="3"></textarea></p>
+    <p><input type="submit" value="Send">
+        <input type="reset" value="Clear"></p>
+</form>
+
+<form id="Posts" th:align="center">
+    <div id="div1" th:align="center">
+        <table class="table">
+            <tr>
+                <th>Posts</th>
+            </tr>
+            <tr class="brd" th:each="posts : ${posts}">
+                <td><span th:text="${posts.message}"></span></td>
+            </tr>
+        </table>
+    </div>
+</form>
+
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </html>
@@ -51,6 +71,10 @@
     .right {
         margin-left: 300px;
     }
+
+    .brd {
+        border: 2px solid black;
+    }
 </style>
 
 <script>
@@ -61,7 +85,27 @@
         $.ajax({
             url: "/sendFriendRequest",
             type: "POST",
-            data: {"id" : $('#userId').val()},
+            data: {"id": $('#userId').val()},
+            success: function success(data) {
+                alert("success!");
+            },
+            error: function error(xhr) {
+                return "404Error";
+            }
+        });
+    });
+
+    $("#WritePost").submit(function (e) {
+
+        e.preventDefault();
+
+        $.ajax({
+            url: "/addPost",
+            type: "POST",
+            data: {
+                "id": $('#userId').val(),
+                "text": $('#comment').val()
+            },
             success: function success(data) {
                 alert("success!");
             },

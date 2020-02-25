@@ -6,7 +6,6 @@ import com.findme.Exceptions.InternalServerError;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipType;
 import com.findme.models.User;
-import com.findme.relationship.add.AddRelationship;
 import com.findme.relationship.add.impl.CheckMaxListOfFriends;
 import com.findme.relationship.add.impl.CheckOutComeRequests;
 import com.findme.relationship.checkStatusRelationship.CheckStatus;
