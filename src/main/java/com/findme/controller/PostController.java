@@ -38,6 +38,7 @@ public class PostController {
         return "ok";
     }
 
+    /****/
     public List<Post> getPostsOfUser(User user) throws InternalServerError {
         List<Post> posts;
         try {
