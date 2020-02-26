@@ -21,12 +21,13 @@ public class PostDAO implements GenericDao<Post> {
     @Autowired
     private GeneralDAO<Post> generalDAO;
 
-    public Post addPost(User userPosted, User userProfile, String text) throws InternalServerError {
+    public Post addPost(User userPosted, User userProfile, String text, List<User> userTagged) throws InternalServerError {
         Post post = new Post();
         post.setDatePosted(new Date());
         post.setMessage(text);
         post.setUserPosted(userPosted);
         post.setUserPagePosted(userProfile);
+        post.setUsersTagged(userTagged);
 
         try {
             return generalDAO.save(post);
@@ -40,7 +41,6 @@ public class PostDAO implements GenericDao<Post> {
         query1.setParameter("idPage", pageId);
         return query1.getResultList();
     }
-
 
     @Override
     public Post save(Post t) throws InternalServerError {

@@ -7,9 +7,12 @@ import com.findme.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.jws.soap.SOAPBinding;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.util.LinkedList;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -84,6 +87,21 @@ public class UserDAO implements GenericDao<User> {
             return null;
         }
         return user;
+    }
+
+    public List<User> getUserTagged(String idsUserTagged) throws InternalServerError {
+        List<User> userTagged = new LinkedList<>();
+
+        String[] ids = idsUserTagged.split(" ");
+
+        if (ids.length != 0) {
+            for (String id : ids) {
+                User user = read(Long.parseLong(id));
+                userTagged.add(user);
+            }
+        } else return null;
+
+        return userTagged;
     }
 
     /***********************************/

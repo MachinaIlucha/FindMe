@@ -22,12 +22,12 @@ public class PostController {
 
 
     @RequestMapping(path = "/addPost", method = RequestMethod.POST, produces = "text/plain")
-    public String addPost(HttpSession session, @RequestParam("id") Long profileId, @RequestParam("text") String post) {
+    public String addPost(HttpSession session, @RequestParam("id") Long profileId, @RequestParam("text") String post, @RequestParam("userTagged") String userTagged) {
 
         if (session.getAttribute("login") != null) {
             try {
                 User userFrom = (User) session.getAttribute("user");
-                postService.addPost(userFrom.getId(), profileId, post);
+                postService.addPost(userFrom.getId(), profileId, post, userTagged);
             } catch (InternalServerError e) {
                 return "500Error";
             } catch (NumberFormatException | BadRequestException e) {

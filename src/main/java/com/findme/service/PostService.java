@@ -8,6 +8,7 @@ import com.findme.Exceptions.InternalServerError;
 import com.findme.models.Post;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipType;
+import com.findme.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +26,13 @@ public class PostService {
     @Autowired
     private UserDAO userDAO;
 
-    public Post addPost(Long userPosted, Long userProfile, String text) throws InternalServerError, BadRequestException {
+    public Post addPost(Long userPosted, Long userProfile, String text, String userTagged) throws InternalServerError, BadRequestException {
         Relationship relationship = relationshipDAO.getRelationshipByQuery(userPosted, userProfile);
 
+        List<User> usersTagged = userDAO.getUserTagged(userTagged);
+
         if (relationship != null && relationship.getStatus() == RelationshipType.FRIENDS)
-            return postDAO.addPost(userDAO.read(userPosted), userDAO.read(userProfile), text);
+            return postDAO.addPost(userDAO.read(userPosted), userDAO.read(userProfile), text, usersTagged);
         else throw new BadRequestException("BadRequestException");
     }
 
