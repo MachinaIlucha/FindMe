@@ -16,7 +16,7 @@
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <hibernate.version>5.3.7.Final</hibernate.version>
         <oracle.ojdbc.version>12.1.0</oracle.ojdbc.version>
-        <fasterxml.jackson-databind.version>2.9.4</fasterxml.jackson-databind.version>
+        <fasterxml.jackson-databind.version>2.9.10.3</fasterxml.jackson-databind.version>
         <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
     </properties>
 
