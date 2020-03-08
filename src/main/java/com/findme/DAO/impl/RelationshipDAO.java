@@ -23,7 +23,7 @@ public class RelationshipDAO implements GenericDao<Relationship> {
     private final String SQL_getIncomeRequests = "From Relationship as rel inner join rel.userTo where rel.userTo.id = :idTo";
     private final String SQL_getOutcomeRequests = "From Relationship as rel inner join rel.userFrom where rel.userFrom.id = :idFrom";
     private final String SQL_checkRelationship = "From Relationship as rel where rel.userFrom.id = :idFrom and rel.userTo.id = :idTo";
-//    private final String SQL_getCountOfFriends = "Select count(*) FROM Relationship as rel" +
+    //    private final String SQL_getCountOfFriends = "Select count(*) FROM Relationship as rel" +
 //            "where rel.userFrom.id = :idFrom and rel.status = :status";
     private final String SQL_getCountOfFriends = "Select count(*) FROM Relationship as rel" +
             " where rel.userFrom.id = :idFrom and rel.status = :status";

@@ -56,7 +56,7 @@ public class UserController {
         try {
 
             user = userService.read(Long.parseLong(userId));
-            List<Post> posts = postController.getPostsOfUser(user);
+            List<Post> posts = postController.getAllPosts(user);
             model.addAttribute("posts", posts);
 
             if (user == null)
