@@ -9,6 +9,7 @@ import com.findme.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,7 +45,7 @@ public class PostController {
     }
 
     @RequestMapping(path = "/PostsFriends", method = RequestMethod.GET)
-    public String getPostByFriends(Model model, HttpSession session, @RequestParam("id") Long profileId) {
+    public String getPostByFriends(Model model, HttpSession session, @PathVariable Long profileId) {
         User user;
 
         if (session.getAttribute("login") != null) {
@@ -56,7 +57,7 @@ public class PostController {
                 model.addAttribute("user", user);
             } catch (InternalServerError e) {
                 return "500Error";
-            } catch (NumberFormatException | BadRequestException e) {
+            } catch (NumberFormatException e) {
                 return "400Error";
             }
         } else return "login";

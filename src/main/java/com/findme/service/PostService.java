@@ -42,10 +42,8 @@ public class PostService {
         else throw new BadRequestException("BadRequestException");
     }
 
-    public List<Post> getPostByFriends(Long pageId) throws BadRequestException, InternalServerError {
-        if (userDAO.read(pageId) != null)
+    public List<Post> getPostByFriends(Long pageId){
             return postDAO.getPostsByFriends(pageId);
-        else throw new BadRequestException("BadRequestException");
     }
 
     public List<Post> getPostsOfUser(Long userId) throws BadRequestException, InternalServerError {

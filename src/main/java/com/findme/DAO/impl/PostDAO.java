@@ -17,10 +17,10 @@ import java.util.List;
 @Repository
 public class PostDAO implements GenericDao<Post> {
 
-    private final String SQL_getAllPosts = "From Post as rel where rel.userPagePosted.id = :idPage order by rel.datePosted ASC";
-    private final String SQL_getPostsOfUser = "From Post as rel where rel.userPosted.id = :idUser order by rel.datePosted ASC";
-    private final String SQL_getPostsOfFriends =
-            "From Post as pos inner join Relationship as rel on rel.userFrom.id = :idFrom and rel.status = :status and pos.userPagePosted.id = :idPage " +
+    private final String SQL_GETALLPOSTS = "From Post as rel where rel.userPagePosted.id = :idPage order by rel.datePosted ASC";
+    private final String SQL_GETPOSTSOFUSER = "From Post as rel where rel.userPosted.id = :idUser order by rel.datePosted ASC";
+    private final String SQL_GETPOSTOFFRIEND =
+            "From Post as pos inner join Relationship as rel on rel.userFrom.id = :idUserFrom and rel.status = FRIENDS and pos.userPagePosted.id = :idOfUserPage " +
                     "order by pos.datePosted ASC";
 
     @Autowired
@@ -54,21 +54,20 @@ public class PostDAO implements GenericDao<Post> {
     }
 
     public List<Post> getAllpostsByQuery(Long pageId) {
-        Query query1 = generalDAO.getEntityManager().createQuery(SQL_getAllPosts);
+        Query query1 = generalDAO.getEntityManager().createQuery(SQL_GETALLPOSTS);
         query1.setParameter("idPage", pageId);
         return query1.getResultList();
     }
 
     public List<Post> getPostsByFriends(Long pageId) {
-        Query query1 = generalDAO.getEntityManager().createQuery(SQL_getPostsOfFriends);
-        query1.setParameter("idPage", pageId);
-        query1.setParameter("idFrom", pageId);
-        query1.setParameter("status", RelationshipType.FRIENDS);
+        Query query1 = generalDAO.getEntityManager().createQuery(SQL_GETPOSTOFFRIEND);
+        query1.setParameter("idOfUserPage", pageId);
+        query1.setParameter("idUserFrom", pageId);
         return query1.getResultList();
     }
 
     public List<Post> getPostsByUser(Long userId) {
-        Query query1 = generalDAO.getEntityManager().createQuery(SQL_getPostsOfUser);
+        Query query1 = generalDAO.getEntityManager().createQuery(SQL_GETPOSTSOFUSER);
         query1.setParameter("idFrom", userId);
         return query1.getResultList();
     }
